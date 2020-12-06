@@ -4,14 +4,17 @@ const httpTrigger: AzureFunction = async function (
   context: Context,
   req: HttpRequest,
 ): Promise<void> {
-  const list = await execAPI(
-    process.env.SPREAD_SHEET_ID,
-    process.env.SPREAD_SHEET_RANGE,
-  )
+  try {
+    const list = await execAPI(
+      process.env.SPREAD_SHEET_ID,
+      process.env.SPREAD_SHEET_RANGE,
+    )
 
-  context.res = {
-    // status: 200, /* Defaults to 200 */
-    body: list,
+    context.res = {
+      body: list,
+    }
+  } catch (e) {
+    context.res = { status: 500, body: e }
   }
 }
 
