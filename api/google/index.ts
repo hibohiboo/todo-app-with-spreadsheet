@@ -1,6 +1,3 @@
-import * as fs from 'fs'
-import * as readline from 'readline'
-import { readFile } from 'fs/promises'
 import path from 'path'
 import { google } from 'googleapis'
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
