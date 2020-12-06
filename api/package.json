@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "tsc && cp google/serviceAccountKey.json ./dist/google/",
+    "build": "tsc && bash ./bash/createKey.sh",
     "watch": "tsc -w",
     "prestart": "npm run build",
     "start": "func start",
