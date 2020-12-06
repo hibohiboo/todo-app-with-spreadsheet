@@ -1,0 +1,8 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "SPREAD_SHEET_ID": "",
+    "SPREAD_SHEET_RANGE": "Sheet1!A2:B100"
+  }
+}

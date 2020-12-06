@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "esModuleInterop": true, // import * as path from 'path' を import path from 'path' と書けるようになる
     "target": "es6",
     "outDir": "dist",
     "rootDir": ".",

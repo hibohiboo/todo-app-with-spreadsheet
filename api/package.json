@@ -3,15 +3,25 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && cp google/serviceAccountKey.json ./dist/google/",
     "watch": "tsc -w",
     "prestart": "npm run build",
     "start": "func start",
     "test": "echo \"No tests yet...\""
   },
-  "dependencies": {},
+  "dependencies": {
+    "googleapis": "^66.0.0"
+  },
   "devDependencies": {
     "@azure/functions": "^1.0.2-beta2",
+    "@types/node": "^14.14.10",
+    "@typescript-eslint/eslint-plugin": "^4.9.0",
+    "@typescript-eslint/parser": "^4.9.0",
+    "eslint": "^7.15.0",
+    "eslint-config-prettier": "^7.0.0",
+    "eslint-plugin-prettier": "^3.2.0",
+    "prettier": "^2.2.1",
+    "ts-node": "^9.1.0",
     "typescript": "^3.3.3"
   }
 }
