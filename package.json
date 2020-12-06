@@ -1,7 +1,9 @@
 {
-  "name": "angular-basic",
+  "name": "todo-with-spread-sheet",
   "version": "0.0.0",
   "scripts": {
     "build": "cp -r public dist"
+  },
+  "dependencies": {
   }
 }
