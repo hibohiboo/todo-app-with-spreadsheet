@@ -20,10 +20,7 @@ const httpTrigger: AzureFunction = async function (
     //   status: 503,
     //   body: { e, env: process.env, dirName: __dirname },
     // }
-    const file = await readFile(
-      path.join(__dirname, '../google/serviceAccountKey.json'),
-    )
-    context.res = { body: { message: 'server error', file } }
+    context.res = { body: { message: 'server error', context } }
   }
 }
 
