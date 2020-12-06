@@ -15,8 +15,8 @@ const httpTrigger: AzureFunction = async function (
     }
   } catch (e) {
     context.res = {
-      status: 500,
-      body: { e, sheetId: process.env.SPREAD_SHEET_ID, dirName: __dirname },
+      status: 503,
+      body: { e, env: process.env, dirName: __dirname },
     }
   }
 }
