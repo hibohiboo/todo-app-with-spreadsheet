@@ -3,7 +3,7 @@ import { execAPI } from '../google'
 import path from 'path'
 import { readFile } from 'fs/promises'
 const httpTrigger: AzureFunction = async function (
-  context: Context,
+  context: any,
   req: HttpRequest,
 ): Promise<void> {
   try {
@@ -20,7 +20,10 @@ const httpTrigger: AzureFunction = async function (
     //   status: 503,
     //   body: { e, env: process.env, dirName: __dirname },
     // }
-    context.res = { body: { message: 'server error', context } }
+
+    context.res = {
+      body: { message: 'server error', dir: context.functionDirectory },
+    }
   }
 }
 
