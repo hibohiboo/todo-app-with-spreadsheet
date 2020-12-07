@@ -5,7 +5,10 @@ const sheets = google.sheets('v4')
 
 export async function execAPI(spreadsheetId, range) {
   const auth = await google.auth.getClient({
-    keyFile: path.join(__dirname, 'serviceAccountKey.json'),
+    credentials: {
+      client_email: process.env.SERVICE_ACCOUNT_CLIENT_EMAIL,
+      private_key: process.env.SERVICE_ACCOUNT_PRIVATE_KEY,
+    },
     scopes: SCOPES,
   })
 
