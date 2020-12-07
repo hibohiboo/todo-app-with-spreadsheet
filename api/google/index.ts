@@ -1,4 +1,5 @@
 import { google } from 'googleapis'
+import type { Todo, DataStorage } from '@/types'
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
 const sheets = google.sheets('v4')
 
@@ -33,3 +34,20 @@ export async function execAPI(spreadsheetId, range) {
     })
   })
 }
+
+const exportsObj: DataStorage<Todo> = {
+  fetchAll: async () => {
+    return Promise.all([])
+  },
+  fetchByCompleted: (completed) => {
+    return exportsObj.fetchAll()
+  },
+  create: async (todo) => {
+    console.log(todo)
+  },
+  update: async (id, update) => {
+    return { id, title: '', completed: false }
+  },
+  remove: async (id) => id,
+}
+export default exportsObj
