@@ -16,13 +16,9 @@ const httpTrigger: AzureFunction = async function (
       body: list,
     }
   } catch (e) {
-    // context.res = {
-    //   status: 503,
-    //   body: { e, env: process.env, dirName: __dirname },
-    // }
-
     context.res = {
-      body: { message: 'server error', dir: context.functionDirectory },
+      status: 503,
+      body: { e, env: process.env, dirName: __dirname },
     }
   }
 }
