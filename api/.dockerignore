@@ -1,0 +1,17 @@
+# Dockerfile以下のファイルをコンテナ作成時に追加しようとするため、不要なフォルダはignoreする
+# !を使うとorderが上がるため。
+#  ls -1 でファイル一覧を縦に並べる
+babel.config.js
+bin
+deploy_log
+dist
+docker-compose.yml
+Dockerfile
+jest.config.js
+node_modules
+public
+README.md
+README_vue.md
+src
+tests
+tsconfig.json

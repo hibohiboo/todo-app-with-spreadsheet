@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  azure-todo-functions:
+    build: .
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - 9229:9229
+      - 7071:7071
+    working_dir: /app
+    command: [npm, run, start]
