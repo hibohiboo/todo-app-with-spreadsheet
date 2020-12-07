@@ -4,19 +4,24 @@
   "description": "",
   "scripts": {
     "build": "tsc",
-    "watch": "tsc -w",
+    "tsc-watch": "tsc -w",
     "prestart": "npm run build",
     "start": "func start",
-    "test": "echo \"No tests yet...\""
+    "test": "echo \"No tests yet...\"",
+    "jest-watch": "jest --watch",
+    "watch": "concurrently \"npm run tsc-watch\" \"npm run jest-watch\""
   },
   "dependencies": {
-    "googleapis": "^66.0.0"
+    "googleapis": "^66.0.0",
+    "lodash": "^4.17.20"
   },
   "devDependencies": {
     "@azure/functions": "^1.0.2-beta2",
+    "@types/lodash": "^4.14.165",
     "@types/node": "^14.14.10",
     "@typescript-eslint/eslint-plugin": "^4.9.0",
     "@typescript-eslint/parser": "^4.9.0",
+    "concurrently": "^5.3.0",
     "dotenv": "^8.2.0",
     "eslint": "^7.15.0",
     "eslint-config-prettier": "^7.0.0",
