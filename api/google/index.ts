@@ -1,4 +1,3 @@
-import path from 'path'
 import { google } from 'googleapis'
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
 const sheets = google.sheets('v4')
