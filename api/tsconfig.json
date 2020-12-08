@@ -6,6 +6,8 @@
     "outDir": "dist",
     "rootDir": ".",
     "sourceMap": true,
-    "strict": false
+    "strict": false,
+    "baseUrl": "./",
+    "paths": {"@/*": ["shares/*"]},
   }
 }
