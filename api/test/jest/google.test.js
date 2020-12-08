@@ -20,7 +20,10 @@ for (const dataStorageName of ['google']) {
     // 毎回のテスト実行前に全てのToDoを削除
     beforeEach(async () => {
       const allTodos = await fetchAll()
-      await Promise.all(allTodos.map(({ id }) => remove(id)))
+      console.log(allTodos)
+      await Promise.all(
+        allTodos.map(async ({ rowNumber }) => await remove(rowNumber)),
+      )
     })
 
     describe('create(), fetchAll()', () => {
@@ -28,14 +31,24 @@ for (const dataStorageName of ['google']) {
         expect(await fetchAll()).toEqual([])
 
         const todo1 = { id: 'a', title: 'ネーム', completed: false }
+        const expcted1 = { ...todo1, rowNumber: 1 }
         await create(todo1)
-        expect(await fetchAll()).toEqual([todo1])
+
+        expect(await fetchAll()).toEqual([expcted1])
 
         const todo2 = { id: 'b', title: '下書き', completed: false }
+        const expcted2 = { ...todo2, rowNumber: 2 }
         await create(todo2)
+
         const todo3 = { id: 'c', title: 'ペン入れ', completed: false }
+        const expcted3 = { ...todo3, rowNumber: 3 }
         await create(todo3)
-        expect(sortTodoById(await fetchAll())).toEqual([todo1, todo2, todo3])
+
+        expect(sortTodoById(await fetchAll())).toEqual([
+          expcted1,
+          expcted2,
+          expcted3,
+        ])
       })
     })
 
