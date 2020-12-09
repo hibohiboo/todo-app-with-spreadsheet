@@ -17,18 +17,13 @@ for (const dataStorageName of ['google']) {
   } = require(`../../dist/${dataStorageName}`).default
   const { removeRange } = require(`../../dist/${dataStorageName}`)
 
-  describe(dataStorageName, () => {
+  // 普段はスキップ
+  // 実際にスプレッドシートにアクセスするので時間がかかるため。
+  // テスト時はjest --testTimeout=10000 のオプションが必要。
+  describe.skip(dataStorageName, () => {
     // 毎回のテスト実行前に全てのToDoを削除
     beforeEach(async () => {
-      // const allTodos = await fetchAll()
-      // // console.log(allTodos)
-      // await Promise.all(
-      //   allTodos.map(async ({ rowNumber }) => remove(rowNumber)),
-      // )
-
-      // const ret =
-      await removeRange(1, 4)
-      // console.log('remove', ret)
+      await removeRange(1, 6)
     })
 
     describe('create(), fetchAll()', () => {
@@ -41,19 +36,19 @@ for (const dataStorageName of ['google']) {
 
         expect(await fetchAll()).toEqual([expcted1])
 
-        // const todo2 = { id: 'b', title: '下書き', completed: false }
-        // const expcted2 = { ...todo2, rowNumber: 2 }
-        // await create(todo2)
+        const todo2 = { id: 'b', title: '下書き', completed: false }
+        const expcted2 = { ...todo2, rowNumber: 2 }
+        await create(todo2)
 
-        // const todo3 = { id: 'c', title: 'ペン入れ', completed: false }
-        // const expcted3 = { ...todo3, rowNumber: 3 }
-        // await create(todo3)
+        const todo3 = { id: 'c', title: 'ペン入れ', completed: false }
+        const expcted3 = { ...todo3, rowNumber: 3 }
+        await create(todo3)
 
-        // expect(sortTodoById(await fetchAll())).toEqual([
-        //   expcted1,
-        //   expcted2,
-        //   expcted3,
-        // ])
+        expect(sortTodoById(await fetchAll())).toEqual([
+          expcted1,
+          expcted2,
+          expcted3,
+        ])
       })
     })
 
@@ -96,10 +91,43 @@ for (const dataStorageName of ['google']) {
         expect(await remove(2)).toBe(2)
         expect(await fetchAll()).toEqual([expcted1])
       })
-      // test('存在しないIDを指定するとnullを返す', async () => {
-      //   expect(await remove(3)).toBeNull()
-      //   expect(sortTodoById(await fetchAll())).toEqual([expcted1, expcted2])
-      // })
+    })
+    describe('update()', () => {
+      const todo1 = { id: 'a', title: 'ネーム', completed: false }
+      const todo2 = { id: 'b', title: '下書き', completed: false }
+      const expcted1 = { ...todo1, rowNumber: 1 }
+      const expcted2 = { ...todo2, rowNumber: 2 }
+      beforeEach(async () => {
+        await create(todo1)
+        await create(todo2)
+      })
+      test('指定したIDのToDoを更新し、更新後のToDoを返す', async () => {
+        // completedを更新
+        expect(await update(1, { completed: true })).toEqual({
+          rowNumber: 1,
+          id: 'a',
+          title: 'ネーム',
+          completed: true,
+        })
+        expect(await fetchByCompleted(true)).toEqual([
+          { rowNumber: 1, id: 'a', title: 'ネーム', completed: true },
+        ])
+        expect(await fetchByCompleted(false)).toEqual([expcted2])
+
+        // タイトルを更新
+        expect(await update(2, { title: 'ペン入れ' })).toEqual({
+          rowNumber: 2,
+          id: 'b',
+          title: 'ペン入れ',
+          completed: false,
+        })
+        expect(await fetchByCompleted(true)).toEqual([
+          { rowNumber: 1, id: 'a', title: 'ネーム', completed: true },
+        ])
+        expect(await fetchByCompleted(false)).toEqual([
+          { rowNumber: 2, id: 'b', title: 'ペン入れ', completed: false },
+        ])
+      })
     })
   })
 }

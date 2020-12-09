@@ -1,6 +1,6 @@
 import { google } from 'googleapis'
 import type { Todo, DataStorage as SpreadSheetStorage } from '@/types'
-import _ from 'lodash'
+import { values } from 'lodash'
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 const sheets = google.sheets('v4')
 const spreadsheetId = process.env.APPSETTING_SPREAD_SHEET_ID
@@ -76,7 +76,7 @@ async function fetch(rowNumber): Promise<null | string[]> {
     const response = (
       await sheets.spreadsheets.values.batchGetByDataFilter(request)
     ).data
-    console.log(`${rowNumber} response`, response)
+    // console.log(`${rowNumber} response`, response)
     if (!response.valueRanges || response.valueRanges.length === 0) return null
 
     return response.valueRanges[0].valueRange.values[0]
@@ -132,7 +132,6 @@ const exportsObj: SpreadSheetStorage<Todo> = {
   },
   create: async (todo) => {
     const auth = await getAuth()
-    const values = _.values(todo)
     // APIを呼び出して、行の追加処理
     const req = {
       auth,
@@ -146,7 +145,7 @@ const exportsObj: SpreadSheetStorage<Todo> = {
       insertDataOption: 'INSERT_ROWS',
       // 追加する行のデータ。2次元配列で指定
       resource: {
-        values: [['', ...values]],
+        values: [['', ...values(todo)]],
       },
     }
     await sheets.spreadsheets.values.append(req)
@@ -155,12 +154,12 @@ const exportsObj: SpreadSheetStorage<Todo> = {
   update: async (rowNumber, update) => {
     const auth = await getAuth()
     const arr = await fetch(rowNumber)
-    console.log(`update fetch ${rowNumber}`, arr)
+    // console.log(`update fetch ${rowNumber}`, arr)
     if (!arr) return null
     const todo = convertSheetArrayToToDo(arr)
     const updatedTodo = { ...todo, ...update }
-    const values = _.values(updatedTodo)
-    const [a, ...updateValues] = values
+    // const { id, title, completed } = updatedTodo
+    const [_, ...updateValues] = values(updatedTodo) // [id, title, completed]
 
     const request = {
       spreadsheetId,
@@ -189,7 +188,7 @@ const exportsObj: SpreadSheetStorage<Todo> = {
       const response = (
         await sheets.spreadsheets.values.batchUpdateByDataFilter(request)
       ).data
-      console.log('updated', response)
+      // console.log('updated', response)
       if (response.totalUpdatedRows !== 1) return null
     } catch (err) {
       console.error(err)
