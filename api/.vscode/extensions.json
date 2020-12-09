@@ -5,6 +5,7 @@
 	// List of extensions which should be recommended for users of this workspace.
 	"recommendations": [
     "ms-azuretools.vscode-azureappservice",
+    "ms-azuretools.vscode-azurefunctions",
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
     "editorconfig.editorconfig",

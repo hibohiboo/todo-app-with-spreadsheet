@@ -3,7 +3,7 @@
   "Values": {
     "FUNCTIONS_WORKER_RUNTIME": "node",
     "SPREAD_SHEET_ID": "",
-    "SPREAD_SHEET_RANGE": "Sheet1!A2:B100",
+    "SPREAD_SHEET_RANGE": "A2:D100",
     "SERVICE_ACCOUNT_PRIVATE_KEY": "-----BEGIN PRIVATE KEY-----\n省略\n-----END PRIVATE KEY-----\n",
     "SERVICE_ACCOUNT_CLIENT_EMAIL": "hoge@fuga.iam.gserviceaccount.com"
   }
