@@ -34,7 +34,7 @@ async function fetchAll(spreadsheetId: string, range: string) {
     range: `${baseSheetName}!${range}`,
   }
   const res = await sheets.spreadsheets.values.get(apiOptions)
-  if (!res.data.values) return []
+  if (!res.data || !res.data.values) return []
   return res.data.values
 }
 
@@ -53,6 +53,64 @@ async function fetchCompleted(isCompleted) {
   if (!res.data.values) return []
   // console.log('fetchres', res.data)
   return res.data.values
+}
+
+async function fetch(rowNumber): Promise<null | string[]> {
+  const auth = await getAuth()
+  const request = {
+    spreadsheetId,
+    resource: {
+      dataFilters: [
+        {
+          gridRange: {
+            sheetId: baseSheetId,
+            startRowIndex: rowNumber,
+            endRowIndex: rowNumber + 1,
+          },
+        },
+      ],
+    },
+    auth,
+  }
+  try {
+    const response = (
+      await sheets.spreadsheets.values.batchGetByDataFilter(request)
+    ).data
+    console.log(`${rowNumber} response`, response)
+    if (!response.valueRanges || response.valueRanges.length === 0) return null
+
+    return response.valueRanges[0].valueRange.values[0]
+  } catch (err) {
+    console.error(err)
+    return null
+  }
+}
+
+async function remove(start: number, end: number) {
+  // console.log('remove', rowNumber)
+  const auth = await getAuth()
+  const req = {
+    auth,
+    spreadsheetId: spreadsheetId,
+    resource: {
+      requests: [
+        {
+          deleteDimension: {
+            range: {
+              sheetId: baseSheetId,
+              dimension: 'ROWS',
+              startIndex: start,
+              endIndex: end,
+            },
+          },
+        },
+      ],
+    },
+  }
+  // const result =
+  await sheets.spreadsheets.batchUpdate(req)
+  // console.log('removed', result)
+  return start
 }
 
 export const execAPI = fetchAll
@@ -96,50 +154,49 @@ const exportsObj: SpreadSheetStorage<Todo> = {
   },
   update: async (rowNumber, update) => {
     const auth = await getAuth()
-    // const values = _.values(todo)
-    // // APIを呼び出して、行の追加処理
-    // const req = {
-    //   auth,
-    //   // シートのID
-    //   spreadsheetId: spreadsheetId,
-    //   // A1に追記することを指定
-    //   range: 'A1',
-    //   // 追記する形式を指定。
-    //   valueInputOption: 'USER_ENTERED',
-    //   // A1に値があったら下方向に空欄を探しにいく
-    //   insertDataOption: 'INSERT_ROWS',
-    //   // 追加する行のデータ。2次元配列で指定
-    //   resource: {
-    //     values: [['', ...values]],
-    //   },
-    // }
-    // await sheets.spreadsheets.values.update(req)
-    return { rowNumber, id: '', title: '', completed: false }
-  },
-  remove: async (rowNumber) => {
-    // console.log('remove', rowNumber)
-    const auth = await getAuth()
-    const req = {
-      auth,
-      spreadsheetId: spreadsheetId,
+    const arr = await fetch(rowNumber)
+    console.log(`update fetch ${rowNumber}`, arr)
+    if (!arr) return null
+    const todo = convertSheetArrayToToDo(arr)
+    const updatedTodo = { ...todo, ...update }
+    const values = _.values(updatedTodo)
+    const [a, ...updateValues] = values
+
+    const request = {
+      spreadsheetId,
       resource: {
-        requests: [
+        valueInputOption: 'USER_ENTERED',
+        data: [
           {
-            deleteDimension: {
-              range: {
-                sheetId: baseSheetId,
-                dimension: 'ROWS',
-                startIndex: rowNumber,
-                endIndex: rowNumber + 1,
+            dataFilter: {
+              gridRange: {
+                sheetId: 0,
+                startRowIndex: rowNumber,
+                endRowIndex: rowNumber + 1,
+                startColumnIndex: 1,
+                endColumnIndex: 4,
               },
             },
+            values: [updateValues],
+            majorDimension: 'ROWS',
           },
         ],
       },
+      auth,
     }
-    const result = await sheets.spreadsheets.batchUpdate(req)
-    // console.log('removed', result)
-    return rowNumber
+
+    try {
+      const response = (
+        await sheets.spreadsheets.values.batchUpdateByDataFilter(request)
+      ).data
+      console.log('updated', response)
+      if (response.totalUpdatedRows !== 1) return null
+    } catch (err) {
+      console.error(err)
+    }
+    return updatedTodo
   },
+  remove: async (rowNumber) => await remove(rowNumber, rowNumber + 1),
 }
 export default exportsObj
+export const removeRange = async (start, end) => await remove(start, end)
