@@ -8,7 +8,7 @@ services:
       - ../src:/app/src
       - ../elm.json:/app/elm.json
       - ../public:/app/public
-      - ../webpack.config.js:/app/webpack.config.js
+      - ./webpack.config.js:/app/webpack.config.js
       # elm packageのキャッシュ
       - cacheGardenElmStuffStarter:/app/elm-stuff
       - cacheGardenDotElmStarter:/root/.elm

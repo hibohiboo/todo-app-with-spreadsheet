@@ -1,6 +1,8 @@
 const { resolve } = require("path");
 const webpack = require("webpack");
 
+// https://github.com/ronanyeah/elm-webpack を参照
+
 const { ENV } = process.env;
 const publicFolder = resolve("./public");
 const isProd = ENV === "production";
