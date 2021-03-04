@@ -1,7 +1,13 @@
+const { Elm } = require("./Picshare.elm");
 
-const { Elm } = require("./Main.elm");
-console.log('elm')
-Elm.Main.init({
+Elm.Picshare.init({
   node: document.getElementById("app"),
   flags: {},
 });
+
+// const { Elm } = require("./Main.elm");
+// Elm.Main.init({
+//   node: document.getElementById("app"),
+//   flags: {},
+// });
+
