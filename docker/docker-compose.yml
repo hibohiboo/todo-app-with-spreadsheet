@@ -8,6 +8,7 @@ services:
       - ../src:/app/src
       - ../elm.json:/app/elm.json
       - ../public:/app/public
+      - ../webpack.config.js:/app/webpack.config.js
       # elm packageのキャッシュ
       - cacheGardenElmStuffStarter:/app/elm-stuff
       - cacheGardenDotElmStarter:/root/.elm
@@ -16,7 +17,7 @@ services:
     # environment:
     #   - CHOKIDAR_USEPOLLING=true # デフォルトの設定の場合、vagrantだとファイルの変更を検知できない。pollingが必要。
     working_dir: /app
-    command: [npx, elm-live, src/Main.elm, -h, '0.0.0.0', -H]
+    command: [npx, webpack-cli, serve,--hot,--host,'0.0.0.0']
 
 volumes:
   # elmのpackageを毎回ダウンロードしなくてもよいように、キャッシュを行う。2か所のキャッシュが必要。

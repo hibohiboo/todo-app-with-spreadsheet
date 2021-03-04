@@ -1,31 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Elm App</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
-  <title>Vanilla JavaScript App</title>
-</head>
-
-<body>
-  <main>
-    <h1>Vanilla JavaScript App</h1>
-    <p>Loading content from the API: <b id="name">...</b></p>
-  </main>
-
-  <script src="js/index.js"></script>
-  <script>
-    (async function() {
-      let { text } = await( await fetch(`/api/message`)).json();
-      document.querySelector('#name').textContent = text;
-
-    }())
-  </script>
-  <script async defer src="https://apis.google.com/js/api.js" 
-      onload="this.onload=function(){};handleClientLoad()" 
-      onreadystatechange="if (this.readyState === 'complete') this.onload()">
-  </script>
-</body>
-
+  <body>
+    <div id="app"></div>
+    <script src="/bundle.js"></script>
+  </body>
 </html>
