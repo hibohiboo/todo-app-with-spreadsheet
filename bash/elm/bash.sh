@@ -5,7 +5,7 @@ bin_dir=$(cd $(dirname $0) && pwd)
 root_dir=$(cd $bin_dir/../.. && pwd)
 elm_dir=$(cd $root_dir/elm && pwd)
 composeFile=${1:-"docker-compose.yml"}
-container_name=${2:-elm_pages}
+container_name=${2:-elm-project}
 
 # $container_nameの有無をgrepで調べる
 docker ps | grep $container_name
